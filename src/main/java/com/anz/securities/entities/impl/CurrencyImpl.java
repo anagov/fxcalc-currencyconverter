@@ -6,6 +6,12 @@ import java.util.List;
 import com.anz.securities.entities.api.ConversionRule;
 import com.anz.securities.entities.api.Currency;
 
+/**
+ * Type providing implementation to the Currency entity
+ * 
+ * @author Anand Katti
+ *
+ */
 public class CurrencyImpl implements Currency {
 	private String name;
 	private int decimalSupport;
@@ -31,5 +37,4 @@ public class CurrencyImpl implements Currency {
 	public List<ConversionRule> getRules() {
 		return this.ruleList;
 	}
-
 }

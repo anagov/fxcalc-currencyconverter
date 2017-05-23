@@ -3,27 +3,31 @@ package com.anz.securities.entities.api;
 import java.util.List;
 
 /**
+ * Entity representing currency type
  * 
- * @author ANAGOV
+ * @author Anand Katti
  *
  */
 public interface Currency {
-	
+
 	/**
+	 * Returns the currency name
 	 * 
-	 * @return
+	 * @return currencyName
 	 */
 	public String getName();
-	
+
 	/**
+	 * Returns the rules for a currency
 	 * 
-	 * @return
+	 * @return ruleList
 	 */
 	public List<ConversionRule> getRules();
-	
+
 	/**
+	 * Returns the deimal place support for the currency
 	 * 
-	 * @return
+	 * @return decimalSupport
 	 */
 	public int getDecimalSupport();
 

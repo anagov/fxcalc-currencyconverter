@@ -1,7 +1,7 @@
 package com.anz.securities.common.exception;
 
 /**
- * Exceptions occurred during the data initialization are captured here
+ * Represents exception during the data load
  * 
  * @author Anand Katti
  *
@@ -11,6 +11,14 @@ public class UnsuccessfulDataLoading extends ApplicationUnInitialized {
 
 	public UnsuccessfulDataLoading(final String errorMsg) {
 		super(errorMsg);
+	}
+
+	public UnsuccessfulDataLoading(final String errMessage, final Throwable exception) {
+		super(errMessage, exception);
+	}
+
+	public UnsuccessfulDataLoading(final String errMessage, final String errCode) {
+		super(errMessage, errCode);
 	}
 
 }

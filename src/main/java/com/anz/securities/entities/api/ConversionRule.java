@@ -1,21 +1,24 @@
 package com.anz.securities.entities.api;
 
 /**
+ * Entity representing conversion rule
  * 
- * @author ANAGOV
+ * @author Anand Katti
  *
  */
 public interface ConversionRule extends Comparable<ConversionRule> {
 
 	/**
+	 * Returns the currency name
 	 * 
-	 * @return
+	 * @return currencyName
 	 */
 	public String getCurrencyName();
-	
+
 	/**
+	 * Returns the pointer, the currency is linked to
 	 * 
-	 * @return
+	 * @return pointer
 	 */
 	public String getPointer();
 }

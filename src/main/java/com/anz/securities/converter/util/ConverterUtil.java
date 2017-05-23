@@ -15,12 +15,15 @@ import com.anz.securities.entities.dto.CurrencyConverter;
 import com.anz.securities.entities.impl.ConversionRateImpl;
 
 public class ConverterUtil {
+	private ConverterUtil() {
+	}
 
 	/**
+	 * Returns the conversion rate for the source and destination currency
 	 * 
 	 * @param src
 	 * @param dest
-	 * @return
+	 * @return conversionRate
 	 * @throws UndefinedConversionRate
 	 */
 	public static ConversionRate getConversionRate(final CurrencyConverter converter, final TraversalPath path)
@@ -41,10 +44,18 @@ public class ConverterUtil {
 			path.setConversionType(converstionType);
 			return rate;
 		} catch (Exception ex) {
-			throw new UndefinedConversionRate("Rate not defined for" + ex.getMessage());
+			throw new UndefinedConversionRate("Rate not defined for", ex);
 		}
 	}
 
+	/**
+	 * Returns the decimal number support for the currency
+	 * 
+	 * @param converter
+	 * @param currency
+	 * @return decimalSupport
+	 * @throws CurrencyNotSupported
+	 */
 	public static int getDecimalPlaceSupport(final CurrencyConverter converter, final String currency)
 			throws CurrencyNotSupported {
 
@@ -55,15 +66,30 @@ public class ConverterUtil {
 		return cur.getDecimalSupport();
 	}
 
+	/**
+	 * if the source and destination currency are same throws the exception
+	 * 
+	 * @param userInput
+	 * @return false
+	 * @throws SameSourceAndDestinationCurrency
+	 */
 	public static boolean isSourceAndDestinationCurrencySame(final UserInputDto userInput)
 			throws SameSourceAndDestinationCurrency {
 
-		if ( userInput.getSourceCurrency().equalsIgnoreCase(userInput.getDestinationCurrency())) {
+		if (userInput.getSourceCurrency().equalsIgnoreCase(userInput.getDestinationCurrency())) {
 			throw new SameSourceAndDestinationCurrency("Converted Amount is:" + userInput.getConversionAmount());
 		}
-		return true;
+		return false;
 	}
 
+	/**
+	 * Returns true if the currency is supported
+	 * 
+	 * @param converter
+	 * @param currency
+	 * @return true
+	 * @throws CurrencyNotSupported
+	 */
 	public static boolean isCurrencySupported(final CurrencyConverter converter, final String currency)
 			throws CurrencyNotSupported {
 		if (!converter.isCurrencySupported(currency)) {

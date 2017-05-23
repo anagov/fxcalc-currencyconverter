@@ -4,6 +4,12 @@ import java.util.Objects;
 
 import com.anz.securities.entities.api.ConversionRule;
 
+/**
+ * Type providing implementation to the ConversionRule entity
+ * 
+ * @author Anand Katti
+ *
+ */
 public class ConversionRuleImpl implements ConversionRule {
 	
 	private String currencyName;

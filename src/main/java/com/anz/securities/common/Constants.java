@@ -6,7 +6,7 @@ package com.anz.securities.common;
  * @author Anand Katti
  *
  */
-public abstract class Constants {
+public class Constants {
 
 	public static final String CONVERSION_RULE_RESOURCE_KEY = "ConversionRulesResource";
 	public static final String CONVERSION_RULE_RESOURCE_VALUE = "ConversionRules.xml";	
@@ -24,4 +24,5 @@ public abstract class Constants {
 	public static final String CONV_INVERT = "INV";
 	public static final String END_RULE = "NA";
 
+	private Constants() {}
 }

@@ -1,26 +1,31 @@
 package com.anz.securities.entities.api;
+
 /**
+ * Entity representing Conversion Rate
  * 
- * @author ANAGOV
+ * @author Anand Katti
  *
  */
 public interface ConversionRate extends Comparable<ConversionRate> {
 
 	/**
+	 * Returns the source currency
 	 * 
-	 * @return
+	 * @return sourceCurrency
 	 */
 	public String getSourceCurrency();
 
 	/**
+	 * Returns the destination currency
 	 * 
-	 * @return
+	 * @return destinationCurrency
 	 */
 	public String getDestinationCurrency();
 
 	/**
+	 * Returns conversion rate
 	 * 
-	 * @return
+	 * @return rate
 	 */
 	public double getConversionRate();
 }

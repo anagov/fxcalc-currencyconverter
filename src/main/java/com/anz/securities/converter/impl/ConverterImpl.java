@@ -22,6 +22,12 @@ import com.anz.securities.entities.api.Currency;
 import com.anz.securities.entities.dto.CurrencyConverter;
 import com.anz.securities.entities.impl.ConversionRuleImpl;
 
+/**
+ * Provides implementation for the template methods
+ * 
+ * @author Anand Katti
+ *
+ */
 public class ConverterImpl extends AbstractConverter {
 	private static Logger logger = LoggerFactory.getLogger(ConverterImpl.class);
 
@@ -29,8 +35,11 @@ public class ConverterImpl extends AbstractConverter {
 		super(converter);
 	}
 
+	/**
+	 * @see com.anz.securities.converter.impl.AbstractConverter.validateUserInput
+	 */
 	@Override
-	protected void validateUserInput(UserInputDto userInput) throws InvalidData {
+	protected void validateUserInput(final UserInputDto userInput) throws InvalidData {
 		try {
 			logger.info("Validating user request");
 			ConverterUtil.isCurrencySupported(converter, userInput.getSourceCurrency());
@@ -38,20 +47,26 @@ public class ConverterImpl extends AbstractConverter {
 
 			double amount = Double.parseDouble(userInput.getConversionAmount());
 			userInput.setConvertedAmount(amount);
-		} catch (NumberFormatException exNumberFormat) {
+		} catch (final NumberFormatException exNumberFormat) {
 			throw new InvalidData("Incorrect amount format" + exNumberFormat.getMessage());
-		} catch (Exception ex) {
-			throw new InvalidData("Generic Error" + ex.getMessage());
+		} catch (final Exception ex) {
+			throw new InvalidData(ex.getMessage(), ex);
 		}
-
 	}
 
+	/**
+	 * @see com.anz.securities.converter.impl.AbstractConverter.determinePath
+	 */
 	@Override
 	protected void determinePath(UserInputDto userInput) throws RuleNotFound {
 		logger.info("Determining the path");
 		ConverterUtil.isSourceAndDestinationCurrencySame(userInput);
 
 		Map<String, Currency> currencyRuleMap = converter.getMapCurrecy();
+		if (null == currencyRuleMap) {
+			throw new RuleNotFound("No rules Available");
+		}
+
 		String sourceCurrency = userInput.getSourceCurrency();
 		ConversionRule myrule;
 		TraversalPath path;
@@ -65,7 +80,7 @@ public class ConverterImpl extends AbstractConverter {
 			if (null == ruleList || ruleList.isEmpty()) {
 				throw new RuleNotFound("Rule not found exception");
 			}
-			
+
 			Collections.sort(ruleList);
 			int index = Collections.binarySearch(ruleList,
 					new ConversionRuleImpl(userInput.getDestinationCurrency(), ""));
@@ -89,16 +104,29 @@ public class ConverterImpl extends AbstractConverter {
 
 	}
 
+	/**
+	 * @see com.anz.securities.converter.impl.AbstractConverter.convertAmount
+	 */
 	@Override
 	protected void convertAmount(UserInputDto userInput) throws CurrencyNotConverted {
 		logger.info("Performing actual conversion");
 		for (TraversalPath path : userInput.getTraversal()) {
 			ConversionRate rate = ConverterUtil.getConversionRate(converter, path);
-			applyCalculation(userInput, rate, path.getConversionType());
+			double convAmt = applyCalculation(userInput, rate, path.getConversionType());
+			userInput.setConvertedAmount(convAmt);
 		}
 	}
 
-	private void applyCalculation(final UserInputDto userInput, final ConversionRate rate, final String convType)
+	/**
+	 * performs the actual calculation
+	 * 
+	 * @param userInput
+	 * @param rate
+	 * @param convType
+	 * @return
+	 * @throws CurrencyNotConverted
+	 */
+	private double applyCalculation(final UserInputDto userInput, final ConversionRate rate, final String convType)
 			throws CurrencyNotConverted {
 
 		double convertedAmt = 0;
@@ -112,8 +140,6 @@ public class ConverterImpl extends AbstractConverter {
 			convertedAmt = userInput.getConvertedAmount() * (1 / Double.valueOf(rate.getConversionRate()));
 		}
 
-		userInput.setConvertedAmount(
-				new BigDecimal(convertedAmt).setScale(expectedDecimal, RoundingMode.HALF_UP).doubleValue());
-
+		return BigDecimal.valueOf(convertedAmt).setScale(expectedDecimal, RoundingMode.HALF_UP).doubleValue();
 	}
 }

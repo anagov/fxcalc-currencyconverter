@@ -4,7 +4,12 @@ import java.util.Objects;
 
 import com.anz.securities.entities.api.ConversionRate;
 
-
+/**
+ * Type providing implementation to the ConversionRate entity
+ * 
+ * @author Anand Katti
+ *
+ */
 public class ConversionRateImpl implements ConversionRate {
 	private String sourceCurrency;
 	private String destinationCurrency;
